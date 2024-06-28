@@ -47,7 +47,13 @@ powershell -Command "(gc %resourcedir%\%apptask%) -replace '<Arguments></Argumen
 
 echo Creating Task...
 schtasks /Delete /TN "\%installdir%\%installdir%" /F >NUL  2>NUL
+
+:create_task
 schtasks /create /xml "%resourcedir%\%apptask%" /tn "\%installdir%\%installdir%" /ru "%computername%\%username%"
+set "err=%errorlevel%"
+if %err% neq 0 (
+    goto create_task
+)
 
 echo Cleaning up...
 copy /Y "%resourcedir%\backup_%apptask%" "%resourcedir%\%apptask%"  >NUL 2>NUL
