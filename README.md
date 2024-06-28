@@ -4,6 +4,7 @@
 
 * This program serves as a workaround to an _(as of 6/27/24)_ unfixed issue in Windows 10/11 whereby taskbar thumbnail previews are intermittently lost.
     * Z-order and windows priority are preserved
+    * Window transitions are temporarily disabled to minimize processing time
     * The fix is acheived by toggling visibility of all minimized windows a specified amount of times (By default, 3).
         * Depending on the speed of your machine, you may want to modify this and other defaults for optimal results. Please see the `Command Line Arguments` section for more details.
 
