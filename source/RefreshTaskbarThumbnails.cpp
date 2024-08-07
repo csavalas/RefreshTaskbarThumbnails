@@ -16,7 +16,7 @@ int windows_minimized_count = 0;
 HWND windows[max_window_count];
 int windows_count = 0;
 int iterations = 3;
-int waittime = 500;
+int waittime = 1000;
 int showui = 1;
 vector<string> args;
 
@@ -74,8 +74,11 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
             ShowWindow(windows_minimized[j], SW_RESTORE);
             SendMessage(progressHandle, PBM_STEPIT, 0, 0);
         }
-        steady_clock::time_point end = steady_clock::now();        
-        Sleep(max(0, (int) (waittime - duration_cast<milliseconds>(end - begin).count())));
+        steady_clock::time_point end = steady_clock::now();
+        // Pause for waittime minus actual time it took to show all of the windows   
+        // Sleep(max(0, (int) (waittime - duration_cast<milliseconds>(end - begin).count())));
+        // Pause for waittime, irrespective of how long it took to show all of the windows   
+        Sleep(waittime);
         // Minimize minimized windows, restoration order is reversed to preserve Z-order
         for (int j = windows_minimized_count - 1; j >= 0; j--) {
             force_to_top(windows_minimized[j]);
@@ -117,6 +120,9 @@ static BOOL CALLBACK organizeWindows(HWND hwnd, LPARAM lParam) {
         && IsWindowVisible(hwnd)
         && length
         && title != L"Program Manager"
+        && title != L"Microsoft Text Input Application"
+        && title != L"Calculator"
+        && title != L"Settings"                
     ) {
         // Disable window animation, must be re-enabled later
         BOOL attrib = TRUE;
